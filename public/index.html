@@ -9,10 +9,21 @@
 <body>
     <div id="container">
         <h1>Chat Room</h1>
-        <ul id="messages"></ul>
-        <form id="form" action="">
-            <input id="input" autocomplete="off" placeholder="Type your message..." /><button>Send</button>
-        </form>
+        <div id="username-form">
+            <label for="username">Enter your name: </label>
+            <input id="username" autocomplete="off" />
+            <button id="join-button">Join Chat</button>
+        </div>
+        <div id="chat" style="display: none;">
+            <div id="chat-header">
+                <p>Logged in as: <span id="logged-in-username"></span></p>
+                <button id="leave-button">Leave Chat</button>
+            </div>
+            <ul id="messages"></ul>
+            <form id="form" action="">
+                <input id="input" autocomplete="off" placeholder="Type your message..." /><button>Send</button>
+            </form>
+        </div>
     </div>
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
