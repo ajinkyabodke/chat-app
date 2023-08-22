@@ -1,3 +1,20 @@
+/* ... (other styles) ... */
+
+@media screen and (max-width: 600px) {
+    #container {
+        padding: 10px;
+    }
+    #form {
+        flex-direction: column;
+    }
+    #input {
+        margin-top: 10px;
+    }
+    button {
+        margin-top: 10px;
+    }
+}
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
