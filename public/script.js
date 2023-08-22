@@ -11,9 +11,6 @@ $(function() {
         "congratulations": "🎉",
     };
 
-
-
-
     $('#join-button').click(function() {
         username = $('#username').val();
         if (username.trim() === "") {
@@ -46,21 +43,31 @@ $(function() {
         return false;
     });
 
+    function getCurrentTimestamp() {
+        var now = new Date();
+        var hours = now.getHours();
+        var minutes = now.getMinutes().toString().padStart(2, '0');
+        var ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = (hours % 12) || 12; // Convert to 12-hour format
+        return `${hours}:${minutes} ${ampm}`;
+    }
+
+
     socket.on('chat message', function(data) {
+        var timestamp = getCurrentTimestamp();
         var message = data.message;
 
         // Replace words with emojis
         for (var word in emojiDictionary) {
             if (emojiDictionary.hasOwnProperty(word)) {
                 var emoji = emojiDictionary[word];
-                var wordPattern = new RegExp(`\\b${word}\\b`, 'gi'); // Create a RegExp for whole word match
+                var wordPattern = new RegExp(`\\b${word}\\b`, 'gi');
                 message = message.replace(wordPattern, emoji);
             }
         }
 
-        $('#messages').append($('<li>').html(`<span style="color: ${data.color};">${message}</span>`));
+        $('#messages').append($('<li>').html(`<span style="color: ${data.color};">${timestamp} - ${message}</span>`));
     });
-
 });
 
 function getRandomColor() {
