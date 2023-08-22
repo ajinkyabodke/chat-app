@@ -38,10 +38,45 @@ $(function() {
 
     $('form').submit(function() {
         var message = $('#input').val();
-        socket.emit('chat message', { message: `${username}: ${message}`, color: userColors[username] });
+
+        if (message.startsWith('/')) {
+            // Handle slash commands locally
+            var command = message.substr(1).toLowerCase();
+            if (command === 'help') {
+                showHelpPopup();
+                $('#input').val(''); // Clear input after command
+                return false; // Prevent sending command to server
+            } else if (command === 'clear') {
+                clearChat();
+                $('#input').val('');
+                return false;
+            } else if (command === 'random') {
+                showRandomNumber();
+                $('#input').val('');
+                return false;
+            }
+        } else {
+            // Regular message
+            socket.emit('chat message', { message: `${username}: ${message}`, color: userColors[username] });
+        }
+
         $('#input').val('');
         return false;
     });
+
+    function showHelpPopup() {
+        // Show help popup (you can use any method/modal you prefer)
+        alert('Available slash commands:\n/help - Show this help\n/clear - Clear the chat\n/random - Generate a random number');
+    }
+
+    function clearChat() {
+        $('#messages').empty();
+    }
+
+    function showRandomNumber() {
+        var randomNumber = Math.floor(Math.random() * 100) + 1;
+        $('#messages').append($('<li>').html(`<span style="color: ${userColors[username]};">You generated a random number: ${randomNumber}</span>`));
+    }
 
     function getCurrentTimestamp() {
         var now = new Date();
@@ -51,6 +86,8 @@ $(function() {
         hours = (hours % 12) || 12; // Convert to 12-hour format
         return `${hours}:${minutes} ${ampm}`;
     }
+
+
 
 
     socket.on('chat message', function(data) {
