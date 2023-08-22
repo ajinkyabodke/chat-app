@@ -2,6 +2,17 @@ $(function() {
     var socket = io();
     var username = "";
     var userColors = {};
+    var emojiDictionary = {
+        "react": "⚛️",
+        "woah": "😮",
+        "hey": "👋",
+        "lol": "😂",
+        "like": "❤️",
+        "congratulations": "🎉",
+    };
+
+
+
 
     $('#join-button').click(function() {
         username = $('#username').val();
@@ -36,8 +47,20 @@ $(function() {
     });
 
     socket.on('chat message', function(data) {
-        $('#messages').append($('<li>').html(`<span style="color: ${data.color};">${data.message}</span>`));
+        var message = data.message;
+
+        // Replace words with emojis
+        for (var word in emojiDictionary) {
+            if (emojiDictionary.hasOwnProperty(word)) {
+                var emoji = emojiDictionary[word];
+                var wordPattern = new RegExp(`\\b${word}\\b`, 'gi'); // Create a RegExp for whole word match
+                message = message.replace(wordPattern, emoji);
+            }
+        }
+
+        $('#messages').append($('<li>').html(`<span style="color: ${data.color};">${message}</span>`));
     });
+
 });
 
 function getRandomColor() {
