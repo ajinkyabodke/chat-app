@@ -13,11 +13,14 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', () => {
         console.log('A user disconnected');
+        io.emit('onlineUsers', io.engine.clientsCount); // Send the updated count
     });
 
     socket.on('chat message', (msg) => {
         io.emit('chat message', msg);
     });
+
+    io.emit('onlineUsers', io.engine.clientsCount); // Initial count when user connects
 });
 
 const PORT = process.env.PORT || 3000;
