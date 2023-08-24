@@ -152,7 +152,7 @@ $(function () {
     });
 
     function showHelpPopup() {
-        alert('Available slash commands:\n/help - Show this help\n/clear - Clear the chat\n/random - Generate a random number\n/calc <expression> - Perform calculations/rem - to show all keys\n/rem <key> <value> - Set or recall a reminder\n/rem <key> - to recall');
+        alert('Available slash commands:\n/help - Show this help\n/clear - Clear the chat\n/random - Generate a random number\n/calc <expression> - Perform calculations\n/rem - to show all keys\n/rem <key> <value> - Set or recall a reminder\n/rem <key> - to recall');
     }
 
     function clearChat() {
