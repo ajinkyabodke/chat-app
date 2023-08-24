@@ -1,65 +1,177 @@
 /* ... (other styles) ... */
 
-@media screen and (max-width: 600px) {
-    #container {
-        padding: 10px;
-    }
-    #form {
-        flex-direction: column;
-    }
-    #input {
-        margin-top: 10px;
-    }
-    button {
-        margin-top: 10px;
-    }
+/* Add more space to the user name entry screen */
+#username-form {
+    margin-bottom: 40px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+#username {
+    padding: 10px;
+    font-size: 16px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+#join-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    width: 100%;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+#join-button:hover {
+    background-color: #0056b3;
+}
+
+/* Improve input style */
+#input {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px;
+    transition: border-color 0.3s ease;
+}
+
+#input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+/* General button style */
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Leave button style */
+#leave-button {
+    padding: 10px 20px;
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+#leave-button:hover {
+    background-color: #ff4f4f;
+}
+
+/* Use flexbox to center the container */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
     background-color: #f2f2f2;
+    font-family: 'Poppins', sans-serif;
+    overflow: hidden;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background-image: radial-gradient(#ddd 2px, transparent 2px);
+    background-size: 20px 20px;
+    z-index: -1;
 }
 
 #container {
     max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
+    width: 100%;
+    padding: 40px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     background-color: white;
+    text-align: center;
+    height: 80vh;
+    overflow: auto;
 }
 
+/* Set a maximum height for the messages list */
 #messages {
-    list-style-type: none;
-    padding: 0;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-top: 10px;
 }
 
 #messages li {
     padding: 10px;
     border-bottom: 1px solid #ddd;
-}
-
-#form {
     display: flex;
-    margin-top: 10px;
+    justify-content: space-between;
+    align-items: center;
 }
 
-#input {
-    flex: 1;
-    padding: 5px;
-    font-size: 16px;
+/* ... (rest of your existing styles) ... */
+
+#username-form,
+#chat {
+    text-align: center;
 }
 
-#input:focus {
-    outline: none;
+.center-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-button {
-    padding: 5px 15px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
+@media screen and (max-width: 600px) {
+
+    /* Adjust styling for smaller screens */
+    #username-form {
+        padding: 15px;
+    }
+
+    #username {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    #join-button {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+
+    #input {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    button {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
 }
