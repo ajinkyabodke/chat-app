@@ -53,6 +53,8 @@ $(function () {
 
         socket.emit('chat message', { message: `${username} has joined the chat.`, color: userColors[username] });
 
+        socket.emit('userJoin'); // Emit userJoin event when user clicks join button
+
         handleUserJoin();
 
         scrollToBottom();
@@ -60,6 +62,8 @@ $(function () {
 
     $('#leave-button').click(function () {
         socket.emit('chat message', { message: `${username} has left the chat.`, color: userColors[username] });
+        socket.emit('userLeave'); // Emit userLeave event when user clicks leave button
+
         $('#chat').hide();
         $('#username-form').show();
         $('#messages').empty();

@@ -8,20 +8,35 @@ const io = socketIo(server);
 
 app.use(express.static(__dirname + '/public'));
 
+let onlineUsers = 0; // Variable to keep track of online users
+
 io.on('connection', (socket) => {
     console.log('A user connected');
 
-    socket.on('disconnect', () => {
-        console.log('A user disconnected');
-        io.emit('onlineUsers', io.engine.clientsCount); // Send the updated count
+    socket.on('userJoin', () => {
+        socket.join('chatRoom'); // Join a specific room for the chat
+        onlineUsers++;
+        io.to('chatRoom').emit('onlineUsers', onlineUsers); // Update count for the chatRoom
+    });
+
+    socket.on('userLeave', () => {
+        socket.leave('chatRoom'); // Leave the chat room
+        onlineUsers--;
+        io.to('chatRoom').emit('onlineUsers', onlineUsers); // Update count for the chatRoom
     });
 
     socket.on('chat message', (msg) => {
-        io.emit('chat message', msg);
+        io.to('chatRoom').emit('chat message', msg);
     });
 
-    io.emit('onlineUsers', io.engine.clientsCount); // Initial count when user connects
+    socket.on('disconnect', () => {
+        console.log('A user disconnected');
+        onlineUsers--;
+        io.to('chatRoom').emit('onlineUsers', onlineUsers); // Update count for the chatRoom
+    });
 });
+
+
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
