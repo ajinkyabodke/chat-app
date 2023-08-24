@@ -1,5 +1,5 @@
 # chat-app
-Built a ChatRoom Web App using HTML/CSS/JS - https://chat-app-tbtu.onrender.com
+Built a ChatRoom Web App using HTML/CSS/JS - https://chat-app-tbtu.onrender.com <br>
 Available slash commands:
 /help - Show this help, /clear - Clear the chat, /random - Generate a random number,
 /calc <expression> - Perform calculations, /rem - to show all keys, /rem <key> ‹value> - Set or recall a reminder, /rem <key> - to recall 
