@@ -8,6 +8,7 @@ const io = socketIo(server);
 
 app.use(express.static(__dirname + '/public'));
 
+
 let onlineUsers = 0; // Variable to keep track of online users
 
 io.on('connection', (socket) => {
@@ -20,8 +21,9 @@ io.on('connection', (socket) => {
     });
 
     socket.on('userLeave', () => {
-        socket.leave('chatRoom'); // Leave the chat room
-        onlineUsers--;
+        if (onlineUsers > 0) {
+            onlineUsers--;
+        }
         io.to('chatRoom').emit('onlineUsers', onlineUsers); // Update count for the chatRoom
     });
 
@@ -31,10 +33,14 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', () => {
         console.log('A user disconnected');
-        onlineUsers--;
+        if (onlineUsers > 0) {
+            onlineUsers--;
+        }
         io.to('chatRoom').emit('onlineUsers', onlineUsers); // Update count for the chatRoom
     });
 });
+
+
 
 
 
