@@ -16,6 +16,9 @@ $(function () {
 
     var onlineUsers = 0; // Counter for online users
 
+    var typing = false; // Variable to track whether the local user is typing
+    var typingTimeout; // Timer to control the typing notifications
+
     function scrollToBottom() {
         var messages = document.getElementById("messages");
         messages.scrollTop = messages.scrollHeight;
@@ -34,6 +37,26 @@ $(function () {
         onlineUsers--; // Decrement the online user count
         updateOnlineUserCount();
     }
+
+    function sendTypingNotification(isTyping) {
+        socket.emit('typing', { username, isTyping });
+    }
+
+    $('#input').on('input', function () {
+        clearTimeout(typingTimeout); // Clear previous timer
+        if ($(this).val().trim() !== "") {
+            typing = true;
+            sendTypingNotification(true); // Send typing notification
+            typingTimeout = setTimeout(function () {
+                typing = false;
+                sendTypingNotification(false); // Send typing notification
+            }, 2000); // Set timeout to 2 seconds
+        } else {
+            typing = false;
+            sendTypingNotification(false); // Send typing notification
+        }
+    });
+
 
 
     $('#join-button').click(function () {
@@ -151,6 +174,34 @@ $(function () {
         return false;
     });
 
+    function updateTypingStatus(username, isTyping) {
+        const typingStatusElement = $('.typing-status');
+
+        if (isTyping) {
+            if (typingStatusElement.length === 0) {
+                $('#messages').append($('<li class="typing-status">').text(`${username} is typing...`));
+            }
+        } else {
+            typingStatusElement.remove(); // Remove the typing status message
+        }
+        scrollToBottom();
+    }
+
+    $('#input').on('input', function () {
+        clearTimeout(typingTimeout);
+        if ($(this).val().trim() !== "") {
+            typing = true;
+            sendTypingNotification(true);
+            typingTimeout = setTimeout(function () {
+                typing = false;
+                sendTypingNotification(false);
+            }, 2000);
+        } else {
+            typing = false;
+            sendTypingNotification(false);
+        }
+    });
+
     function showHelpPopup() {
         alert('Available slash commands:\n/help - Show this help\n/clear - Clear the chat\n/random - Generate a random number\n/calc <expression> - Perform calculations\n/rem - to show all keys\n/rem <key> <value> - Set or recall a reminder\n/rem <key> - to recall');
     }
@@ -214,6 +265,10 @@ $(function () {
 
     socket.on('connect', function () {
         handleUserJoin();
+    });
+
+    socket.on('typing', function (data) {
+        updateTypingStatus(data.username, data.isTyping); // Update typing status
     });
 
 

@@ -31,6 +31,10 @@ io.on('connection', (socket) => {
         io.to('chatRoom').emit('chat message', msg);
     });
 
+    socket.on('typing', (data) => {
+        socket.broadcast.emit('typing', { username: data.username, isTyping: data.isTyping });
+    });
+
     socket.on('disconnect', () => {
         console.log('A user disconnected');
         if (onlineUsers > 0) {
