@@ -10,6 +10,7 @@ app.use(express.static(__dirname + '/public'));
 
 
 let onlineUsers = 0; // Variable to keep track of online users
+const activeUsers = []; // Keep track of active users
 
 io.on('connection', (socket) => {
     console.log('A user connected');
@@ -17,14 +18,16 @@ io.on('connection', (socket) => {
     socket.on('userJoin', () => {
         socket.join('chatRoom'); // Join a specific room for the chat
         onlineUsers++;
-        io.to('chatRoom').emit('onlineUsers', onlineUsers); // Update count for the chatRoom
+        activeUsers.push(socket.username); // Assuming socket.username is set on the client side
+        io.emit('onlineUsers', { count: onlineUsers, users: activeUsers });
     });
 
     socket.on('userLeave', () => {
         if (onlineUsers > 0) {
             onlineUsers--;
         }
-        io.to('chatRoom').emit('onlineUsers', onlineUsers); // Update count for the chatRoom
+        activeUsers.splice(activeUsers.indexOf(socket.username), 1);
+        io.emit('onlineUsers', { count: onlineUsers, users: activeUsers });  // Update count and users for the chatRoom
     });
 
     socket.on('chat message', (msg) => {
@@ -34,6 +37,8 @@ io.on('connection', (socket) => {
     socket.on('typing', (data) => {
         socket.broadcast.emit('typing', { username: data.username, isTyping: data.isTyping });
     });
+
+
 
     socket.on('disconnect', () => {
         console.log('A user disconnected');
