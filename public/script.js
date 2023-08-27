@@ -24,8 +24,12 @@ $(function () {
         messages.scrollTop = messages.scrollHeight;
     }
 
-    function updateOnlineUserCount() {
+    function updateOnlineUserCount(userList) {
         $('#online-users').text(`Online Users: ${onlineUsers}`);
+
+        // Clear the existing user list and populate it with the updated user list
+        var userListItem = userList.map(user => `<li>${user}</li>`).join('');
+        $('#user-list').html(userListItem);
     }
 
     function handleUserJoin() {
@@ -57,8 +61,6 @@ $(function () {
         }
     });
 
-
-
     $('#join-button').click(function () {
         username = $('#username').val();
         if (username.trim() === "") {
@@ -74,8 +76,10 @@ $(function () {
         $('#logged-in-username').text(username);
         $('#chat').show();
 
-        socket.emit('chat message', { message: `${username} has joined the chat.`, color: userColors[username] });
+        // Assign the entered username to the socket
+        socket.username = username;
 
+        socket.emit('chat message', { message: `${username} has joined the chat.`, color: userColors[username] });
 
         socket.emit('userJoin'); // Emit userJoin event when user clicks join button
 
@@ -83,6 +87,7 @@ $(function () {
 
         scrollToBottom();
     });
+
 
     let leftChat = false; // Flag to prevent double leave emission
 
@@ -257,9 +262,9 @@ $(function () {
         }
         return color;
     }
-    socket.on('onlineUsers', (count) => {
-        onlineUsers = count; // Update the online user count
-        updateOnlineUserCount(); // Call the function to update the count display
+    socket.on('onlineUsers', (data) => {
+        onlineUsers = data.count; // Update the online user count
+        updateOnlineUserCount(data.users); // Update the user list as well
     });
 
 
